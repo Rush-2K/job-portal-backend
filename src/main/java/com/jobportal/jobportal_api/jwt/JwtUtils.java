@@ -36,13 +36,14 @@ public class JwtUtils {
     }
 
     // generate token from the username
-    public String generateTokenFromUsername(UserDetails userDetails) {
+    public String generateTokenFromUsername(UserDetails userDetails, Long userId) {
         String username = userDetails.getUsername();
         // building the token an setting the issue time, expiration time, signing it
         // with a key
         return Jwts.builder()
                 .subject(username)
                 .claim("role", userDetails.getAuthorities().iterator().next().getAuthority().replace("ROLE_", ""))
+                .claim("uid", userId)
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key())
@@ -79,4 +80,6 @@ public class JwtUtils {
         }
         return false;
     }
+
+    // get email/username from security context
 }

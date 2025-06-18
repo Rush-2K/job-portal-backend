@@ -3,6 +3,7 @@ package com.jobportal.jobportal_api.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.UserService;
 
-import io.jsonwebtoken.lang.Collections;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -39,5 +39,10 @@ public class UserController {
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), users));
 
     }
+
+    // @GetMapping("/userdetails")
+    // public ResponseEntity<?> viewUserDetails() {
+    // String email = userService
+    // }
 
 }

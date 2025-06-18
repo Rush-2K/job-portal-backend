@@ -1,5 +1,6 @@
 package com.jobportal.jobportal_api.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -18,10 +19,13 @@ import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.jwt.JwtUtils;
 import com.jobportal.jobportal_api.mapper.AuthMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.jobportal.jobportal_api.dao.UserRepository;
 import com.jobportal.jobportal_api.dto.request.AuthRequestDto;
 import com.jobportal.jobportal_api.dto.response.AuthResponseDto;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -50,6 +54,8 @@ public class UserService {
         // Encode the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserId(UUID.randomUUID().toString());
+        user.setCreatedTime(LocalDateTime.now());
+        user.setUpdatedTime(LocalDateTime.now());
 
         // save the user
         User savedUser = userRepository.save(user);
@@ -78,7 +84,7 @@ public class UserService {
         // getPrincipal() returns the authenticated user object, casted to UserDetails.
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // Generates a JWT token based on the authenticated user’s info
-        String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
+        String jwtToken = jwtUtils.generateTokenFromUsername(userDetails, user.getId());
 
         // Object data = Map.of(
         // "token", jwtToken,
@@ -104,5 +110,9 @@ public class UserService {
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
+
+    // public User getUserDetails() {
+    // String email =
+    // }
 
 }

@@ -11,6 +11,8 @@ import com.jobportal.jobportal_api.entity.User;
 public interface AuthMapper {
 
     @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "role", source = "user.role")
+    @Mapping(target = "userId", source = "user.userId")
     @Mapping(target = "token", expression = "java(token)")
     AuthResponseDto toAuthResponseDto(User user, String token);
 }
