@@ -19,6 +19,7 @@ import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.jwt.JwtUtils;
 import com.jobportal.jobportal_api.jwt.UserPrincipal;
 import com.jobportal.jobportal_api.mapper.AuthMapper;
+import com.jobportal.jobportal_api.mapper.UpdateProfileMapper;
 import com.jobportal.jobportal_api.mapper.UserDetailsMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +40,18 @@ public class UserService {
     private final JwtUtils jwtUtils;
     private final AuthMapper authMapper;
     private final UserDetailsMapper userDetailsMapper;
+    private final UpdateProfileMapper updateProfileMapper;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, JwtUtils jwtUtils, AuthMapper authMapper,
-            UserDetailsMapper userDetailsMapper) {
+            UserDetailsMapper userDetailsMapper, UpdateProfileMapper updateProfileMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.authMapper = authMapper;
         this.userDetailsMapper = userDetailsMapper;
+        this.updateProfileMapper = updateProfileMapper;
     }
 
     public void registerUser(User user) {
@@ -136,6 +139,16 @@ public class UserService {
         log.info("User Data: {}", user);
 
         return userDetailsMapper.toUserProfileResponseDTO(user);
+    }
+
+    public UserProfileResponseDTO updateUserProfile(User user) {
+        User updatedUser = userRepository.save(user);
+
+        return updateProfileMapper.toUserProfileResponseDTO(updatedUser);
+    }
+
+    public User getUserById(String id) {
+        return userRepository.findByUserId(id);
     }
 
 }
