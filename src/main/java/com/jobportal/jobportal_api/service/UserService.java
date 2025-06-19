@@ -2,7 +2,6 @@ package com.jobportal.jobportal_api.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -11,19 +10,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.jwt.JwtUtils;
+import com.jobportal.jobportal_api.jwt.UserPrincipal;
 import com.jobportal.jobportal_api.mapper.AuthMapper;
+import com.jobportal.jobportal_api.mapper.UserDetailsMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.jobportal.jobportal_api.dao.UserRepository;
 import com.jobportal.jobportal_api.dto.request.AuthRequestDto;
 import com.jobportal.jobportal_api.dto.response.AuthResponseDto;
+import com.jobportal.jobportal_api.dto.response.UserProfileResponseDTO;
 
 @Slf4j
 @Service
@@ -35,14 +38,17 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final AuthMapper authMapper;
+    private final UserDetailsMapper userDetailsMapper;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager, JwtUtils jwtUtils, AuthMapper authMapper) {
+            AuthenticationManager authenticationManager, JwtUtils jwtUtils, AuthMapper authMapper,
+            UserDetailsMapper userDetailsMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.authMapper = authMapper;
+        this.userDetailsMapper = userDetailsMapper;
     }
 
     public void registerUser(User user) {
@@ -84,7 +90,7 @@ public class UserService {
         // getPrincipal() returns the authenticated user object, casted to UserDetails.
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // Generates a JWT token based on the authenticated user’s info
-        String jwtToken = jwtUtils.generateTokenFromUsername(userDetails, user.getId());
+        String jwtToken = jwtUtils.generateToken(user.getEmail(), user.getUserId(), user.getRole());
 
         // Object data = Map.of(
         // "token", jwtToken,
@@ -111,8 +117,25 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // public User getUserDetails() {
-    // String email =
-    // }
+    public UserProfileResponseDTO getUserDetails() {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        String userId = principal.getUserId();
+        log.info("User Id: {}", userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            log.warn("No authentication in context – did the JWT filter run?");
+        } else {
+            log.info("Auth principal class: {}", auth.getPrincipal().getClass());
+        }
+
+        User user = userRepository.findByUserId(userId);
+        log.info("User Data: {}", user);
+
+        return userDetailsMapper.toUserProfileResponseDTO(user);
+    }
 
 }

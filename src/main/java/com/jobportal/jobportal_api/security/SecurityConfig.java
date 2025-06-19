@@ -35,12 +35,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configure(http))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/api").permitAll()
+                        // .requestMatchers("/").permitAll()
+                        // .requestMatchers("/api").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Public endpoints for signup/login
 
                         // ADMIN-only
                         .requestMatchers("/api/user/listalluser").hasRole("ADMIN")
+                        .requestMatchers("/api/user/viewuserdetails").hasRole("JOB_SEEKER")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stateless session

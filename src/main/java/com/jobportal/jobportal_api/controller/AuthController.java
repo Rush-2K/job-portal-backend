@@ -36,7 +36,7 @@ public class AuthController {
         userService.registerUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
-                ApiStatus.SUCCESS.name(), LocalDateTime.now(), Collections.emptyMap()));
+                ApiStatus.SUCCESS.name(), LocalDateTime.now(), null));
     }
 
     @PostMapping("/login")
