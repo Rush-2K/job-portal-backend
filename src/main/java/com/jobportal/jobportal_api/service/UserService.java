@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import javax.naming.NameNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -149,6 +151,12 @@ public class UserService {
 
     public User getUserById(String id) {
         return userRepository.findByUserId(id);
+    }
+
+    public void deleteUserById(String userId) {
+        User user = userRepository.findByUserId(userId);
+
+        userRepository.delete(user);
     }
 
 }

@@ -39,9 +39,12 @@ public class SecurityConfig {
                         // .requestMatchers("/api").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Public endpoints for signup/login
 
-                        // ADMIN-only
+                        // ADMIN
                         .requestMatchers("/api/user/listalluser").hasRole("ADMIN")
+                        .requestMatchers("/api/user/deleteuser").hasRole("ADMIN")
+                        // JOB SEEKER
                         .requestMatchers("/api/user/viewuserdetails").hasRole("JOB_SEEKER")
+                        .requestMatchers("/api/user/updateprofile").hasRole("JOB_SEEKER")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stateless session
