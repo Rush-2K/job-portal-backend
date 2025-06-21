@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jobportal.jobportal_api.dto.request.CreateJobRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
+import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.JobManagementService;
@@ -27,6 +29,15 @@ public class JobManagementController {
 
     public JobManagementController(JobManagementService jobManagementService) {
         this.jobManagementService = jobManagementService;
+    }
+
+    // view all jobs posted by employer
+    @GetMapping("/viewjobs")
+    public ResponseEntity<?> getAllJobs() {
+        List<ViewAllJobsResponseDTO> viewAllJobsResponses = jobManagementService.getAllJobs();
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                ApiStatus.SUCCESS.name(), LocalDateTime.now(), viewAllJobsResponses));
     }
 
     @PostMapping("/createpost")

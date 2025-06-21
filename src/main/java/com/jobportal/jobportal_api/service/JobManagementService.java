@@ -11,9 +11,11 @@ import com.jobportal.jobportal_api.dao.UserRepository;
 import com.jobportal.jobportal_api.dto.request.CreateJobRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
 import com.jobportal.jobportal_api.dto.response.UserProfileResponseDTO;
+import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.entity.Job;
 import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.mapper.CreateJobMapper;
+import com.jobportal.jobportal_api.mapper.ViewAllJobsMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,13 +27,15 @@ public class JobManagementService {
     private UserRepository userRepository;
     private UserService userService;
     private CreateJobMapper createJobMapper;
+    private ViewAllJobsMapper viewAllJobsMapper;
 
     public JobManagementService(JobRepository jobRepository, UserRepository userRepository, UserService userService,
-            CreateJobMapper createJobMapper) {
+            CreateJobMapper createJobMapper, ViewAllJobsMapper viewAllJobsMapper) {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.userService = userService;
         this.createJobMapper = createJobMapper;
+        this.viewAllJobsMapper = viewAllJobsMapper;
     }
 
     public List<CreateJobResponseDTO> createJobPost(List<CreateJobRequestDTO> createJobRequestDTO) {
@@ -68,6 +72,15 @@ public class JobManagementService {
         return savedJobs.stream()
                 .map(createJobMapper::toCreateJobResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<ViewAllJobsResponseDTO> getAllJobs() {
+        List<Job> allJobs = jobRepository.findAll();
+
+        return allJobs.stream()
+                .map(viewAllJobsMapper::toViewAllJobsResponseDTO)
+                .collect(Collectors.toList());
+
     }
 
 }
