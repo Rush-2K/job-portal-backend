@@ -29,6 +29,9 @@ public class Job {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "location")
     private String location;
 
@@ -43,7 +46,7 @@ public class Job {
 
     // FK posted by
     @ManyToOne
-    @JoinColumn(name = "posted_by")
+    @JoinColumn(name = "posted_by", referencedColumnName = "id")
     private User user;
 
     @Column(name = "created_at")
