@@ -2,6 +2,7 @@ package com.jobportal.jobportal_api.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -135,8 +136,9 @@ public class UserService {
             log.info("Auth principal class: {}", auth.getPrincipal().getClass());
         }
 
-        User user = userRepository.findByUserId(userId);
-        log.info("User Data: {}", user);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        // log.info("User Data: {}", user);
 
         return userDetailsMapper.toUserProfileResponseDTO(user);
     }
@@ -148,11 +150,14 @@ public class UserService {
     }
 
     public User getUserById(String id) {
-        return userRepository.findByUserId(id);
+        return userRepository.findByUserId(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
     }
 
     public void deleteUserById(String userId) {
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         userRepository.delete(user);
     }
