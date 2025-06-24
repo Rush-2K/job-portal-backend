@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jobportal.jobportal_api.dto.request.CreateJobRequestDTO;
 import com.jobportal.jobportal_api.dto.request.UpdateJobDetailsRequestDTO;
+import com.jobportal.jobportal_api.dto.request.UpdateJobStatusRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
@@ -68,7 +69,15 @@ public class JobManagementController {
             @RequestBody UpdateJobDetailsRequestDTO updateJobDetailsRequestDTO) {
         jobManagementService.updateJobDetails(jobId, updateJobDetailsRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
-                "Job updated successfully", LocalDateTime.now(), null));
+                "Job details updated successfully", LocalDateTime.now(), null));
     }
 
+    // enable and disable visibility
+    @PatchMapping("/updatejobstatus/{jobId}")
+    public ResponseEntity<?> updateJobStatus(@PathVariable Long jobId,
+            @RequestBody UpdateJobStatusRequestDTO updateJobStatusRequestDTO) {
+        jobManagementService.updateJobStatus(jobId, updateJobStatusRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                "Job Status updated successfully", LocalDateTime.now(), null));
+    }
 }

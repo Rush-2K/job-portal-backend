@@ -44,6 +44,9 @@ public class Job {
     @Column(name = "jobType")
     private String jobType;
 
+    @Column(name = "jobStatus")
+    private boolean jobStatus;
+
     // FK posted by
     @ManyToOne
     @JoinColumn(name = "posted_by", referencedColumnName = "id")
