@@ -162,4 +162,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public void verifyUser() {
+        UserProfileResponseDTO userProfileResponseDTO = getUserDetails();
+        String id = userProfileResponseDTO.getUserId();
+    }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.jobportal.jobportal_api.dao.JobRepository;
 import com.jobportal.jobportal_api.dao.UserRepository;
 import com.jobportal.jobportal_api.dto.request.CreateJobRequestDTO;
+import com.jobportal.jobportal_api.dto.request.UpdateJobDetailsRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
 import com.jobportal.jobportal_api.dto.response.UserProfileResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
@@ -114,6 +115,58 @@ public class JobManagementService {
         Job jobToBeDelete = jobRepository.findById(jobId)
                 .orElseThrow(() -> new EntityNotFoundException("Job Not found"));
         jobRepository.delete(jobToBeDelete);
+    }
+
+    public void updateJobDetails(Long jobId, UpdateJobDetailsRequestDTO updateJobDetailsRequestDTO) {
+        // check if the user is valid/token is valid
+        UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
+        String tokenUserId = userProfileResponseDTO.getUserId();
+
+        // get the user by userId
+        User userOpt = userRepository.findByUserId(tokenUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // get the id
+        Long realId = userOpt.getId();
+        log.info("Job Id: {}, Real UserId: {}", jobId, realId);
+
+        // cross check the user id with the posted by id
+        boolean check = jobRepository.existsByIdAndUser_Id(jobId, realId);
+        log.info("Check: {}", check);
+
+        if (!check) {
+            throw new AccessDeniedException("You are not authorized to delete");
+        }
+
+        // get the job object using id
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new EntityNotFoundException("Job cannot be found"));
+
+        // validate each field
+        if (updateJobDetailsRequestDTO.getTitle() != null) {
+            job.setTitle(updateJobDetailsRequestDTO.getTitle());
+        }
+        if (updateJobDetailsRequestDTO.getDescription() != null) {
+            job.setDescription(updateJobDetailsRequestDTO.getDescription());
+        }
+        if (updateJobDetailsRequestDTO.getLocation() != null) {
+            job.setLocation(updateJobDetailsRequestDTO.getLocation());
+        }
+        if (updateJobDetailsRequestDTO.getCompanyName() != null) {
+            job.setCompanyName(updateJobDetailsRequestDTO.getCompanyName());
+        }
+        if (updateJobDetailsRequestDTO.getSalary() != null) {
+            job.setSalary(updateJobDetailsRequestDTO.getSalary());
+        }
+        if (updateJobDetailsRequestDTO.getJobType() != null) {
+            job.setJobType(updateJobDetailsRequestDTO.getJobType());
+        }
+
+        // set the updated time
+        job.setUpdatedTime(LocalDateTime.now());
+
+        // save
+        jobRepository.save(job);
     }
 
 }
