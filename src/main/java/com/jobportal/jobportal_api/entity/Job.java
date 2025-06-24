@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,6 +52,7 @@ public class Job {
     // FK posted by
     @ManyToOne
     @JoinColumn(name = "posted_by", referencedColumnName = "id")
+    @JsonIgnoreProperties({ "jobs" })
     private User user;
 
     @Column(name = "created_at")
@@ -58,9 +61,9 @@ public class Job {
     @Column(name = "updated_at")
     private LocalDateTime updatedTime;
 
-    @OneToMany(mappedBy = "jobs", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "jobs")
     private Set<Application> application = new HashSet<>();
 
-    @OneToMany(mappedBy = "jobs", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "jobs")
     private Set<Bookmark> bookmark = new HashSet<>();
 }

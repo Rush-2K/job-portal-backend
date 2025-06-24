@@ -38,6 +38,7 @@ public class SecurityConfig {
                         // .requestMatchers("/").permitAll()
                         // .requestMatchers("/api").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Public endpoints for signup/login
+                        .requestMatchers("/api/jobs/**").permitAll()
 
                         // ADMIN
                         .requestMatchers("/api/user/listalluser").hasRole("ADMIN")
