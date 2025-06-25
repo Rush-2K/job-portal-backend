@@ -24,7 +24,7 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", unique = true)
     private String userId;
 
     @Column(name = "name")

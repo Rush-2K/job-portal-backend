@@ -55,6 +55,13 @@ public class JobApplicationService {
         Job jobApplied = jobRepository.findById(jobId)
                 .orElseThrow(() -> new EntityNotFoundException("Job Not Found"));
 
+        boolean applicationCheck = applicationRepository.existsByJobs_IdAndUser_Id(jobId, userOpt.getId());
+
+        // check if user already applied for the job
+        if (applicationCheck) {
+            throw new IllegalStateException("User has already applied for this job");
+        }
+
         // upload resume to s3
         String resumeUrl = s3Service.upload(resume, userOpt.getUserId());
 
