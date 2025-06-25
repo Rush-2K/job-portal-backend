@@ -17,7 +17,6 @@ import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.UserService;
 
-import io.jsonwebtoken.lang.Collections;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

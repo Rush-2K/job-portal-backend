@@ -3,6 +3,7 @@ package com.jobportal.jobportal_api.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public class UserService {
 
         // Encode the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUserId(UUID.randomUUID().toString());
+        user.setUserId(generateId());
         user.setCreatedTime(LocalDateTime.now());
         user.setUpdatedTime(LocalDateTime.now());
 
@@ -165,6 +166,12 @@ public class UserService {
     public void verifyUser() {
         UserProfileResponseDTO userProfileResponseDTO = getUserDetails();
         String id = userProfileResponseDTO.getUserId();
+    }
+
+    public String generateId() {
+        Random random = new Random();
+        int number = 100000 + random.nextInt((900000));
+        return String.valueOf(number);
     }
 
 }

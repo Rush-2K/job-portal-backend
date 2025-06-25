@@ -2,8 +2,12 @@ package com.jobportal.jobportal_api.entity;
 
 import java.time.LocalDateTime;
 
+import com.jobportal.jobportal_api.enums.ApplicationStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +27,7 @@ public class Application {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @ManyToOne
@@ -33,8 +37,9 @@ public class Application {
     @Column(name = "resume_url")
     private String resumeUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private ApplicationStatus status = ApplicationStatus.PENDING;
 
     @Column(name = "applied_at")
     private LocalDateTime appliedTime;
