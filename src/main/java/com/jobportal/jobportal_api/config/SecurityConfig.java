@@ -1,4 +1,4 @@
-package com.jobportal.jobportal_api.security;
+package com.jobportal.jobportal_api.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
