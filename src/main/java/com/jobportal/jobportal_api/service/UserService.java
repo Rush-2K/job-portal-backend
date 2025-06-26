@@ -79,6 +79,7 @@ public class UserService {
     }
 
     public AuthResponseDto login(AuthRequestDto authRequestDto) {
+        log.info("LOGIN STARTED");
         // check for email
         User user = userRepository.findByEmail(authRequestDto.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
@@ -95,14 +96,15 @@ public class UserService {
         // getPrincipal() returns the authenticated user object, casted to UserDetails.
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // Generates a JWT token based on the authenticated user’s info
-        String jwtToken = jwtUtils.generateToken(user.getEmail(), user.getUserId(), user.getRole());
+        log.info("userId: {}", user.getId());
+        String jwtToken = jwtUtils.generateToken(user.getEmail(), user.getId(), user.getRole());
 
         // Object data = Map.of(
         // "token", jwtToken,
         // "email", user.getEmail(),
         // "username", user.getName(),
         // "userId", user.getId());
-
+        log.info("LOGIN ENDED");
         return authMapper.toAuthResponseDto(user, jwtToken);
     }
 
@@ -128,8 +130,8 @@ public class UserService {
                 .getAuthentication()
                 .getPrincipal();
 
-        String userId = principal.getUserId();
-        log.info("User Id: {}", userId);
+        Long userId = principal.getUserId();
+        // log.info("User Id: {}", userId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
             log.warn("No authentication in context – did the JWT filter run?");
@@ -137,7 +139,7 @@ public class UserService {
             log.info("Auth principal class: {}", auth.getPrincipal().getClass());
         }
 
-        User user = userRepository.findByUserId(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         // log.info("User Data: {}", user);
 
@@ -150,8 +152,8 @@ public class UserService {
         return updateProfileMapper.toUserProfileResponseDTO(updatedUser);
     }
 
-    public User getUserById(String id) {
-        return userRepository.findByUserId(id)
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
     }
@@ -165,7 +167,7 @@ public class UserService {
 
     public void verifyUser() {
         UserProfileResponseDTO userProfileResponseDTO = getUserDetails();
-        String id = userProfileResponseDTO.getUserId();
+        Long id = userProfileResponseDTO.getUserId();
     }
 
     public String generateId() {

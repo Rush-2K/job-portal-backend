@@ -46,7 +46,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             String email = jwtUtils.extractEmail(token);
             String role = jwtUtils.extractRoles(token);
-            String userId = jwtUtils.extractUserId(token);
+            Long userId = jwtUtils.extractUserId(token);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

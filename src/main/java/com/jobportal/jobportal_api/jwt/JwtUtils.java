@@ -94,7 +94,7 @@ public class JwtUtils {
     }
 
     // generate token together with uid and roles
-    public String generateToken(String username, String userId, String roles) {
+    public String generateToken(String username, Long userId, String roles) {
         Date now = new Date();
         Date exp = new Date((new Date()).getTime() + jwtExpirationMs);
 
@@ -120,8 +120,8 @@ public class JwtUtils {
         return claims(token).getSubject();
     }
 
-    public String extractUserId(String token) {
-        return claims(token).get("uid", String.class);
+    public Long extractUserId(String token) {
+        return claims(token).get("uid", Long.class);
     }
 
     public String extractRoles(String token) {

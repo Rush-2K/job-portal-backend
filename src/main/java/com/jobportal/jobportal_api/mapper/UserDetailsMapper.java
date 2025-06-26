@@ -10,7 +10,7 @@ import com.jobportal.jobportal_api.entity.User;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserDetailsMapper {
 
-    @Mapping(target = "userId", source = "user.userId")
+    @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "name", source = "user.name")
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "role", source = "user.role")

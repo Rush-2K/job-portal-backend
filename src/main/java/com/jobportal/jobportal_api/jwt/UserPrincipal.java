@@ -8,11 +8,11 @@ import java.util.Collection;
 /** Custom principal that carries the immutable DB id. */
 public class UserPrincipal implements UserDetails {
 
-    private final String userId;
+    private final Long userId;
     private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(String userId,
+    public UserPrincipal(Long userId,
             String email,
             Collection<? extends GrantedAuthority> authorities) {
         this.userId = userId;
@@ -20,7 +20,7 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

@@ -62,7 +62,7 @@ public class UserController {
     public ResponseEntity<?> updateUserProfile(@RequestBody UpdateUserProfileRequestDTO updateUserProfileRequestDTO) {
         // get the userid inside the token
         UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
-        String id = userProfileResponseDTO.getUserId();
+        Long id = userProfileResponseDTO.getUserId();
 
         // get the user profile
         User user = userService.getUserById(id);

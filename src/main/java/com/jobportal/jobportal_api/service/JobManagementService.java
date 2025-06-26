@@ -47,11 +47,11 @@ public class JobManagementService {
     public List<CreateJobResponseDTO> createJobPost(List<CreateJobRequestDTO> createJobRequestDTO) {
         // get the currently authenticated user
         UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
-        String userId = userProfileResponseDTO.getUserId();
+        Long userId = userProfileResponseDTO.getUserId();
         log.info(": {}", userId);
 
         // retrieve the user entity from DB
-        User user = userRepository.findByUserId(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         ;
 
@@ -95,10 +95,10 @@ public class JobManagementService {
     public boolean verifyPostedByWithUserId(Long jobId) {
         // check if the user is valid/token is valid
         UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
-        String tokenUserId = userProfileResponseDTO.getUserId();
+        Long tokenUserId = userProfileResponseDTO.getUserId();
 
         // get the user by userId
-        User userOpt = userRepository.findByUserId(tokenUserId)
+        User userOpt = userRepository.findById(tokenUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // get the id

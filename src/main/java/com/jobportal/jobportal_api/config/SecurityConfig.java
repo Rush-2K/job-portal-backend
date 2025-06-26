@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/viewuserdetails").hasRole("JOB_SEEKER")
                         .requestMatchers("/api/user/updateprofile").hasRole("JOB_SEEKER")
                         .requestMatchers("/api/jobapplication/{jobId}/apply").hasRole("JOB_SEEKER")
+                        .requestMatchers("/api/jobapplication/view").hasRole("JOB_SEEKER")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // stateless session
