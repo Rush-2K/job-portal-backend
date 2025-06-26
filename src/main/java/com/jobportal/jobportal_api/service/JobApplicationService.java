@@ -79,6 +79,7 @@ public class JobApplicationService {
         newApplication.setResumeUrl(resumeUrl);
         newApplication.setStatus(ApplicationStatus.PENDING);
         newApplication.setAppliedTime(LocalDateTime.now());
+        newApplication.setUpdatedTime(LocalDateTime.now());
 
         // save
         applicationRepository.save(newApplication);
@@ -103,6 +104,19 @@ public class JobApplicationService {
 
         // return
         return viewOwnApplicationsMapper.toViewOwnApplicationsResponseDTOList(appliedApplications);
+    }
+
+    public void withdrawJob(Long applicationId) {
+        UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
+        Long tokenUserId = userProfileResponseDTO.getUserId();
+        Application appliedJob = applicationRepository.findByIdAndUser_Id(applicationId, tokenUserId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Application Not Found or does not belong to current user"));
+
+        appliedJob.setStatus(ApplicationStatus.WITHDRAWN);
+        appliedJob.setUpdatedTime(LocalDateTime.now());
+
+        applicationRepository.save(appliedJob);
     }
 
 }

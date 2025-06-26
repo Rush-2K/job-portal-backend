@@ -47,4 +47,12 @@ public class JobApplicationController {
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), data));
     }
 
+    @PostMapping("/withdraw/{applicationId}")
+    public ResponseEntity<?> withdrawJob(@PathVariable Long applicationId) {
+        jobApplicationService.withdrawJob(applicationId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                ApiStatus.SUCCESS.name(), LocalDateTime.now(), null));
+    }
+
 }

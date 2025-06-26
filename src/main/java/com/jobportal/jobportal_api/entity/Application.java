@@ -43,4 +43,7 @@ public class Application {
 
     @Column(name = "applied_at")
     private LocalDateTime appliedTime;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedTime;
 }
