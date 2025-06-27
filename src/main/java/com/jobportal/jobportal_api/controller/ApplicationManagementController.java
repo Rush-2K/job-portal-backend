@@ -8,11 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jobportal.jobportal_api.dto.request.UpdateApplicationStatusRequestDTO;
 import com.jobportal.jobportal_api.dto.response.ApplicationDetailResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ApplicationSummaryResponseDTO;
+import com.jobportal.jobportal_api.dto.response.UpdateApplicationStatusResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.ApplicationManagementService;
@@ -50,4 +54,13 @@ public class ApplicationManagementController {
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), response));
     }
 
+    @PostMapping("/updatestatus")
+    public ResponseEntity<?> updateApplicationStatus(
+            @RequestBody UpdateApplicationStatusRequestDTO updateApplicationStatusRequestDTO) {
+        UpdateApplicationStatusResponseDTO response = applicationManagementService
+                .updateStatus(updateApplicationStatusRequestDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                "Updated Status Successfully", LocalDateTime.now(), response));
+    }
 }

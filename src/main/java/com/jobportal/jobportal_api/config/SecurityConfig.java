@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/jobmgmt/updatejobstatus/{jobId}").hasRole("EMPLOYER")
                         .requestMatchers("/api/applicationmgmt/viewAllApplication").hasRole("EMPLOYER")
                         .requestMatchers("/api/applicationmgmt/viewdetails/{appId}").hasRole("EMPLOYER")
+                        .requestMatchers("/api/applicationmgmt/updatestatus").hasRole("EMPLOYER")
                         // JOB SEEKER
                         .requestMatchers("/api/user/viewuserdetails").hasRole("JOB_SEEKER")
                         .requestMatchers("/api/user/updateprofile").hasRole("JOB_SEEKER")
