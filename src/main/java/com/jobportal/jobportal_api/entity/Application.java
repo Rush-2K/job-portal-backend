@@ -14,11 +14,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true) // Optional safety net
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "applications")
-@Data
 public class Application {
 
     @Id
@@ -30,6 +40,7 @@ public class Application {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job jobs;

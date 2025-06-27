@@ -17,6 +17,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
         Optional<Job> findByIdAndJobStatus(Long jobId, Boolean jobStatus);
 
+        @Query("SELECT DISTINCT j FROM Job j LEFT JOIN FETCH j.application a LEFT JOIN FETCH a.user WHERE j.user.id = :userId")
+        List<Job> findJobsWithApplicationsAndApplicantsByUserId(Long userId);
+
         @Query("SELECT j FROM Job j WHERE " +
                         "(:location IS NULL OR j.location = :location) AND " +
                         "(:jobType IS NULL OR j.jobType = :jobType) AND " +

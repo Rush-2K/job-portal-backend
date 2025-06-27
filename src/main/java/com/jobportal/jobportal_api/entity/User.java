@@ -12,11 +12,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true) // Optional safety net
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
-@Data
 public class User {
 
     @Id
@@ -45,9 +55,11 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedTime;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     private Set<Job> jobs = new HashSet<>();
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     private Set<Application> applications = new HashSet<>();
 

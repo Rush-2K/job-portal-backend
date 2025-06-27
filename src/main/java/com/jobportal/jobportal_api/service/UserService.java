@@ -165,9 +165,11 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public void verifyUser() {
+    public Long getUserIdInsideToken() {
         UserProfileResponseDTO userProfileResponseDTO = getUserDetails();
         Long id = userProfileResponseDTO.getUserId();
+
+        return id;
     }
 
     public String generateId() {

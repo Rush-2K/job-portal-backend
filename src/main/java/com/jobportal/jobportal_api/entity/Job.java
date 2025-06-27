@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +15,21 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true) // Optional safety net
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "jobs")
-@Data
 public class Job {
 
     @Id
@@ -61,6 +70,7 @@ public class Job {
     @Column(name = "updated_at")
     private LocalDateTime updatedTime;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "jobs")
     private Set<Application> application = new HashSet<>();
 
