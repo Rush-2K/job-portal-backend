@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.jobportal.jobportal_api.dao.ApplicationRepository;
 import com.jobportal.jobportal_api.dao.JobRepository;
+import com.jobportal.jobportal_api.dto.response.ApplicationDetailResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ApplicationSummaryResponseDTO;
 import com.jobportal.jobportal_api.entity.Application;
 import com.jobportal.jobportal_api.entity.Job;
 import com.jobportal.jobportal_api.entity.User;
+import com.jobportal.jobportal_api.mapper.ApplicationDetailMapper;
 import com.jobportal.jobportal_api.mapper.ApplicationSummaryMapper;
 
 import jakarta.transaction.Transactional;
@@ -26,21 +28,22 @@ public class ApplicationManagementService {
     private UserService userService;
     private JobRepository jobRepository;
     private ApplicationSummaryMapper applicationSummaryMapper;
+    private ApplicationDetailMapper applicationDetailMapper;
 
     public ApplicationManagementService(ApplicationRepository applicationRepository, UserService userService,
-            JobRepository jobRepository, ApplicationSummaryMapper applicationSummaryMapper) {
+            JobRepository jobRepository, ApplicationSummaryMapper applicationSummaryMapper,
+            ApplicationDetailMapper applicationDetailMapper) {
         this.applicationRepository = applicationRepository;
         this.userService = userService;
         this.jobRepository = jobRepository;
         this.applicationSummaryMapper = applicationSummaryMapper;
+        this.applicationDetailMapper = applicationDetailMapper;
     }
 
     @Transactional
     public List<ApplicationSummaryResponseDTO> viewAllApplications() {
-        log.info("view all application service started");
         // get userid inside token
         Long userId = userService.getUserIdInsideToken();
-        log.info("userId: {}", userId);
 
         // verify user with Job entity
         List<Job> listOfJobs = jobRepository.findJobsWithApplicationsAndApplicantsByUserId(userId);
@@ -49,13 +52,16 @@ public class ApplicationManagementService {
                     job.getApplication().size());
         }
 
-        log.info("verify user job entity done");
-
-        log.info("view all application service ended");
-
         // return to DTO
         return applicationSummaryMapper.toApplicationSummaryResponseDTOs(listOfJobs);
 
+    }
+
+    public ApplicationDetailResponseDTO getApplicationDetails(Long applicationId) {
+
+        Application applicationDetails = applicationRepository.findApplicationDetailsWithId(applicationId);
+
+        return applicationDetailMapper.toApplicationDetailResponseDTO(applicationDetails);
     }
 
 }
