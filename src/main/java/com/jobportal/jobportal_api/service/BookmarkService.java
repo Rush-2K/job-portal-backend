@@ -1,5 +1,7 @@
 package com.jobportal.jobportal_api.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
@@ -8,6 +10,7 @@ import com.jobportal.jobportal_api.dao.JobRepository;
 import com.jobportal.jobportal_api.dao.UserRepository;
 import com.jobportal.jobportal_api.dto.response.BookmarkJobResponseDTO;
 import com.jobportal.jobportal_api.dto.response.RemoveBookmarkResponseDTO;
+import com.jobportal.jobportal_api.dto.response.ViewBookmarkJobResponseDTO;
 import com.jobportal.jobportal_api.entity.Bookmark;
 import com.jobportal.jobportal_api.entity.Job;
 import com.jobportal.jobportal_api.entity.User;
@@ -89,6 +92,16 @@ public class BookmarkService {
         dto.setMessage("Bookmark removed successfully");
 
         return dto;
+
+    }
+
+    public List<ViewBookmarkJobResponseDTO> view() {
+        // get userId inside token
+        Long userId = userService.getUserIdInsideToken();
+
+        List<ViewBookmarkJobResponseDTO> listOfBookmarkedJobs = bookmarkRepository.findBookmarksByUserId(userId);
+
+        return listOfBookmarkedJobs;
 
     }
 
