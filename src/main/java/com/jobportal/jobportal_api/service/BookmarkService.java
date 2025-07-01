@@ -100,7 +100,6 @@ public class BookmarkService {
         Long userId = userService.getUserIdInsideToken();
 
         List<ViewBookmarkJobResponseDTO> listOfBookmarkedJobs = bookmarkRepository.findBookmarksByUserId(userId);
-
         return listOfBookmarkedJobs;
 
     }
