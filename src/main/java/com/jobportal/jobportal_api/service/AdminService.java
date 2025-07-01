@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.jobportal.jobportal_api.dao.UserRepository;
+import com.jobportal.jobportal_api.dto.request.UpdateUserStatusRequestDTO;
+import com.jobportal.jobportal_api.dto.response.UpdateUserStatusResponseDTO;
 import com.jobportal.jobportal_api.dto.response.UserProfileDetailsAdminResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllUsersResponseDTO;
 import com.jobportal.jobportal_api.dtos.PagedResponseDTO;
 import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.enums.UserStatus;
 import com.jobportal.jobportal_api.mapper.UserProfileDetailsAdminMapper;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AdminService {
@@ -58,6 +62,20 @@ public class AdminService {
         result.setMessage("Retrieve user details successfully");
 
         return result;
+
+    }
+
+    public void changeUserStatus(UpdateUserStatusRequestDTO request) {
+        // get user and status
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        // validation if status is same
+        if (user.getStatus() == request.getStatus()) {
+            throw new IllegalStateException("User already has the requested status");
+        }
+        // set new status and save
+        user.setStatus(request.getStatus());
+        userRepository.save(user);
 
     }
 

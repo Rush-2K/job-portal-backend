@@ -8,10 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jobportal.jobportal_api.dto.request.UpdateUserStatusRequestDTO;
+import com.jobportal.jobportal_api.dto.response.UpdateUserStatusResponseDTO;
 import com.jobportal.jobportal_api.dto.response.UserProfileDetailsAdminResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllUsersResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
@@ -57,6 +61,13 @@ public class AdminController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
                 data.getMessage(), LocalDateTime.now(), data));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUserStatus(@RequestBody UpdateUserStatusRequestDTO request) {
+        adminService.changeUserStatus(request);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                "User status updated successfully", LocalDateTime.now(), null));
     }
 
 }
