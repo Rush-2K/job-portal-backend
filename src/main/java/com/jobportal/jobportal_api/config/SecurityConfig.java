@@ -43,7 +43,8 @@ public class SecurityConfig {
                         // ADMIN
                         .requestMatchers("/api/user/listalluser").hasRole("ADMIN")
                         .requestMatchers("/api/user/deleteuser").hasRole("ADMIN")
-                        .requestMatchers("/api/admin/viewall").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/view").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/view/{userId}").hasRole("ADMIN")
                         .requestMatchers("/api/admin/filter").hasRole("ADMIN")
                         // EMPLOYER
                         .requestMatchers("/api/jobmgmt/createpost").hasRole("EMPLOYER")
