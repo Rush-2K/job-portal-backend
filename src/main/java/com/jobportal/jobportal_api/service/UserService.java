@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jobportal.jobportal_api.entity.User;
+import com.jobportal.jobportal_api.enums.UserStatus;
 import com.jobportal.jobportal_api.jwt.JwtUtils;
 import com.jobportal.jobportal_api.jwt.UserPrincipal;
 import com.jobportal.jobportal_api.mapper.AuthMapper;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.jobportal.jobportal_api.dao.UserRepository;
 import com.jobportal.jobportal_api.dto.request.AuthRequestDto;
+import com.jobportal.jobportal_api.dto.request.SignUpRequestDTO;
 import com.jobportal.jobportal_api.dto.response.AuthResponseDto;
 import com.jobportal.jobportal_api.dto.response.UserProfileResponseDTO;
 
@@ -54,14 +56,19 @@ public class UserService {
         this.updateProfileMapper = updateProfileMapper;
     }
 
-    public void registerUser(User user) {
+    public void registerUser(SignUpRequestDTO signUpUser) {
+        User user = new User();
         // Check for duplicate email
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(signUpUser.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists!");
         }
 
         // Encode the password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(signUpUser.getPassword()));
+        user.setName(signUpUser.getName());
+        user.setEmail(signUpUser.getEmail());
+        user.setRole(signUpUser.getRole());
+        user.setStatus(UserStatus.ACTIVE);
         user.setUserId(generateId());
         user.setCreatedTime(LocalDateTime.now());
         user.setUpdatedTime(LocalDateTime.now());
@@ -70,7 +77,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         // Query and log the user from the database
-        User fetchedUser = userRepository.findByEmail(user.getEmail())
+        User fetchedUser = userRepository.findByEmail(signUpUser.getEmail())
                 .orElseThrow(() -> new IllegalStateException("User not saved!"));
         logger.info("User registered successfully and fetched from DB: {}", fetchedUser.getEmail());
 

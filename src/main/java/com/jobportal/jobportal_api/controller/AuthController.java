@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jobportal.jobportal_api.dto.request.AuthRequestDto;
+import com.jobportal.jobportal_api.dto.request.SignUpRequestDTO;
 import com.jobportal.jobportal_api.dto.response.AuthResponseDto;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
 import com.jobportal.jobportal_api.entity.User;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody SignUpRequestDTO user) {
         userService.registerUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),

@@ -96,7 +96,7 @@ public class JwtUtils {
     // generate token together with uid and roles
     public String generateToken(String username, Long userId, String roles) {
         Date now = new Date();
-        Date exp = new Date((new Date()).getTime() + jwtExpirationMs);
+        Date exp = new Date(now.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
                 .setSubject(username)
