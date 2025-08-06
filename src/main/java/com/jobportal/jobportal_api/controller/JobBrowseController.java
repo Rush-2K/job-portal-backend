@@ -3,6 +3,9 @@ package com.jobportal.jobportal_api.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +36,13 @@ public class JobBrowseController {
 
     // view all active jobs only
     @GetMapping("/view")
-    public ResponseEntity<?> listAllActiveJobs() {
-        List<ViewAllActiveJobsResponseDTO> data = jobBrowseService.getAllActiveJobs();
+    public ResponseEntity<?> listAllActiveJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ViewAllActiveJobsResponseDTO> data = jobBrowseService.getAllActiveJobs(pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), data));

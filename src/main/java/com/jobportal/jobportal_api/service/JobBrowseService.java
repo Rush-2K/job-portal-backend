@@ -3,6 +3,8 @@ package com.jobportal.jobportal_api.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.jobportal.jobportal_api.dao.JobRepository;
@@ -28,13 +30,9 @@ public class JobBrowseService {
         this.viewActiveJobDetailsMapper = viewActiveJobDetailsMapper;
     }
 
-    public List<ViewAllActiveJobsResponseDTO> getAllActiveJobs() {
-        List<Job> jobs = jobRepository.findByJobStatus(true);
-
-        return jobs.stream()
-                .map(viewAllActiveJobsMapper::toViewAllActiveJobsResponseDTO)
-                .collect(Collectors.toList());
-
+    public Page<ViewAllActiveJobsResponseDTO> getAllActiveJobs(Pageable pageable) {
+        Page<Job> jobs = jobRepository.findByJobStatus(true, pageable);
+        return jobs.map(viewAllActiveJobsMapper::toViewAllActiveJobsResponseDTO);
     }
 
     public ViewActiveJobDetailsResponseDTO getActiveJobDetails(Long jobId) {

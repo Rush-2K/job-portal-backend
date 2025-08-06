@@ -11,5 +11,8 @@ public class ViewAllActiveJobsResponseDTO {
 
     private String title;
     private String location;
+    private String companyName;
+    private Long salary;
+    private String jobType;
     private LocalDateTime createdTime;
 }

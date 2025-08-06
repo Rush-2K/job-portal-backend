@@ -3,6 +3,8 @@ package com.jobportal.jobportal_api.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +15,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
         boolean existsByIdAndUser_Id(Long jobId, Long userId);
 
-        List<Job> findByJobStatus(Boolean jobStatus);
+        Page<Job> findByJobStatus(Boolean jobStatus, Pageable pageable);
 
         Optional<Job> findByIdAndJobStatus(Long jobId, Boolean jobStatus);
 

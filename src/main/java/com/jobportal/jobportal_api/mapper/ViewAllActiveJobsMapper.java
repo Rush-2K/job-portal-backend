@@ -12,6 +12,9 @@ public interface ViewAllActiveJobsMapper {
 
     @Mapping(target = "title", source = "jobs.title")
     @Mapping(target = "location", source = "jobs.location")
+    @Mapping(target = "companyName", source = "jobs.companyName")
+    @Mapping(target = "salary", source = "jobs.salary")
+    @Mapping(target = "jobType", source = "jobs.jobType")
     @Mapping(target = "createdTime", source = "jobs.createdTime")
     ViewAllActiveJobsResponseDTO toViewAllActiveJobsResponseDTO(Job jobs);
 }
