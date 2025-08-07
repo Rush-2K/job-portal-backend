@@ -10,6 +10,7 @@ import com.jobportal.jobportal_api.entity.Job;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ViewAllActiveJobsMapper {
 
+    @Mapping(target = "id", source = "jobs.id")
     @Mapping(target = "title", source = "jobs.title")
     @Mapping(target = "location", source = "jobs.location")
     @Mapping(target = "companyName", source = "jobs.companyName")

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jobportal.jobportal_api.dto.response.ViewActiveJobDetailsResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllActiveJobsResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
+import com.jobportal.jobportal_api.dtos.PagedResponseDTO;
 import com.jobportal.jobportal_api.entity.Job;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.JobBrowseService;
@@ -44,8 +45,16 @@ public class JobBrowseController {
 
         Page<ViewAllActiveJobsResponseDTO> data = jobBrowseService.getAllActiveJobs(pageable);
 
+        PagedResponseDTO<ViewAllActiveJobsResponseDTO> response = new PagedResponseDTO<>(
+                data.getContent(),
+                data.getNumber(),
+                data.getSize(),
+                data.getTotalElements(),
+                data.getTotalPages(),
+                data.isLast());
+
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
-                ApiStatus.SUCCESS.name(), LocalDateTime.now(), data));
+                ApiStatus.SUCCESS.name(), LocalDateTime.now(), response));
     }
 
     // view all active jobs only

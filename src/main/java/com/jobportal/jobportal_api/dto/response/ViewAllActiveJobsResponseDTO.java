@@ -9,6 +9,7 @@ import lombok.Getter;
 @Builder
 public class ViewAllActiveJobsResponseDTO {
 
+    private Long id;
     private String title;
     private String location;
     private String companyName;
