@@ -14,7 +14,6 @@ import com.jobportal.jobportal_api.dto.request.AuthRequestDto;
 import com.jobportal.jobportal_api.dto.request.SignUpRequestDTO;
 import com.jobportal.jobportal_api.dto.response.AuthResponseDto;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
-import com.jobportal.jobportal_api.entity.User;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.UserService;
 

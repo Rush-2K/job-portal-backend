@@ -45,9 +45,17 @@ public class JobManagementController {
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), viewAllJobsResponses));
     }
 
+    @PostMapping("/createmultipost")
+    public ResponseEntity<?> createMultiplePost(@RequestBody List<CreateJobRequestDTO> createJobRequestDTO) {
+        List<CreateJobResponseDTO> responses = jobManagementService.createMultipleJobPost(createJobRequestDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                ApiStatus.SUCCESS.name(), LocalDateTime.now(), responses));
+    }
+
     @PostMapping("/createpost")
-    public ResponseEntity<?> createPost(@RequestBody List<CreateJobRequestDTO> createJobRequestDTO) {
-        List<CreateJobResponseDTO> responses = jobManagementService.createJobPost(createJobRequestDTO);
+    public ResponseEntity<?> createPost(@RequestBody CreateJobRequestDTO createJobRequestDTO) {
+        CreateJobResponseDTO responses = jobManagementService.createJobPost(createJobRequestDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), responses));

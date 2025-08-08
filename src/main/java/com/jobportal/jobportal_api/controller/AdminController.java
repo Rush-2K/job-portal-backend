@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jobportal.jobportal_api.dto.request.UpdateUserStatusRequestDTO;
-import com.jobportal.jobportal_api.dto.response.UpdateUserStatusResponseDTO;
 import com.jobportal.jobportal_api.dto.response.UserProfileDetailsAdminResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllUsersResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
 import com.jobportal.jobportal_api.dtos.PagedResponseDTO;
-import com.jobportal.jobportal_api.entity.Job;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.enums.UserStatus;
 import com.jobportal.jobportal_api.service.AdminService;

@@ -1,11 +1,10 @@
 package com.jobportal.jobportal_api.service;
 
-import java.lang.classfile.ClassFile.Option;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +43,7 @@ public class JobManagementService {
         this.viewAllJobsMapper = viewAllJobsMapper;
     }
 
-    public List<CreateJobResponseDTO> createJobPost(List<CreateJobRequestDTO> createJobRequestDTO) {
+    public CreateJobResponseDTO createJobPost(CreateJobRequestDTO createJobRequestDTO) {
         // get the currently authenticated user
         UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
         Long userId = userProfileResponseDTO.getUserId();
@@ -53,7 +52,36 @@ public class JobManagementService {
         // retrieve the user entity from DB
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        ;
+
+        Job jobsToSave = new Job();
+        jobsToSave.setTitle(createJobRequestDTO.getTitle());
+        jobsToSave.setDescription(createJobRequestDTO.getDescription());
+        jobsToSave.setLocation(createJobRequestDTO.getLocation());
+        jobsToSave.setCompanyName(createJobRequestDTO.getCompanyName());
+        jobsToSave.setSalary(createJobRequestDTO.getSalary());
+        jobsToSave.setJobType(createJobRequestDTO.getJobType());
+        jobsToSave.setJobStatus(true);
+        jobsToSave.setCreatedTime(LocalDateTime.now());
+        jobsToSave.setUpdatedTime(LocalDateTime.now());
+
+        jobsToSave.setUser(user);
+
+        // save job
+        Job savedJob = jobRepository.save(jobsToSave);
+
+        return createJobMapper.toCreateJobResponseDTO(savedJob);
+
+    }
+
+    public List<CreateJobResponseDTO> createMultipleJobPost(List<CreateJobRequestDTO> createJobRequestDTO) {
+        // get the currently authenticated user
+        UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
+        Long userId = userProfileResponseDTO.getUserId();
+        log.info(": {}", userId);
+
+        // retrieve the user entity from DB
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<Job> jobsToSave = createJobRequestDTO.stream().map(dto -> {
             // create job post
