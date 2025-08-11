@@ -36,10 +36,10 @@ public class JobManagementController {
         this.jobManagementService = jobManagementService;
     }
 
-    // view all jobs posted by employer
-    @GetMapping("/viewjobs")
-    public ResponseEntity<?> getAllJobs() {
-        List<ViewAllJobsResponseDTO> viewAllJobsResponses = jobManagementService.getAllJobs();
+    // view all jobs posted by employer, can see theirs only
+    @GetMapping("/viewjobs/{userId}")
+    public ResponseEntity<?> getAllJobs(@PathVariable Long userId) {
+        List<ViewAllJobsResponseDTO> viewAllJobsResponses = jobManagementService.getAllJobs(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), viewAllJobsResponses));

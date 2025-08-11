@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/update").hasRole("ADMIN")
                         // EMPLOYER
                         .requestMatchers("/api/jobmgmt/createpost").hasRole("EMPLOYER")
-                        .requestMatchers("/api/jobmgmt/viewjobs").hasRole("EMPLOYER")
+                        .requestMatchers("/api/jobmgmt/viewjobs/{userId}").hasRole("EMPLOYER")
                         .requestMatchers("/api/jobmgmt/deletejobpost/{jobId}").hasRole("EMPLOYER")
                         .requestMatchers("/api/jobmgmt/updatejobpost/{jobId}").hasRole("EMPLOYER")
                         .requestMatchers("/api/jobmgmt/updatejobstatus/{jobId}").hasRole("EMPLOYER")

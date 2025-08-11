@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.entity.Job;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
@@ -18,6 +19,17 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         Page<Job> findByJobStatus(Boolean jobStatus, Pageable pageable);
 
         Optional<Job> findByIdAndJobStatus(Long jobId, Boolean jobStatus);
+
+        @Query("SELECT new com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO(" +
+                        "j.id, j.title, j.description, j.location, " +
+                        "j.companyName, j.jobStatus, j.salary, j.jobType, " +
+                        "COUNT(a), j.createdTime) " +
+                        "FROM Job j " +
+                        "LEFT JOIN Application a ON a.jobs.id = j.id " +
+                        "WHERE j.user.id = :employerId " +
+                        "GROUP BY j.id, j.title, j.description, j.location, " +
+                        "j.companyName, j.jobStatus, j.salary, j.jobType, j.createdTime")
+        List<ViewAllJobsResponseDTO> findJobsWithApplicationCount(@Param("employerId") Long employerId);
 
         @Query("SELECT DISTINCT j FROM Job j LEFT JOIN FETCH j.application a LEFT JOIN FETCH a.user WHERE j.user.id = :userId")
         List<Job> findJobsWithApplicationsAndApplicantsByUserId(Long userId);

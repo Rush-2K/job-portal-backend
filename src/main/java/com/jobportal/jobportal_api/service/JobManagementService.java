@@ -111,13 +111,10 @@ public class JobManagementService {
                 .collect(Collectors.toList());
     }
 
-    public List<ViewAllJobsResponseDTO> getAllJobs() {
-        List<Job> allJobs = jobRepository.findAll();
+    public List<ViewAllJobsResponseDTO> getAllJobs(Long userId) {
+        List<ViewAllJobsResponseDTO> allJobs = jobRepository.findJobsWithApplicationCount(userId);
 
-        return allJobs.stream()
-                .map(viewAllJobsMapper::toViewAllJobsResponseDTO)
-                .collect(Collectors.toList());
-
+        return allJobs;
     }
 
     public boolean verifyPostedByWithUserId(Long jobId) {
