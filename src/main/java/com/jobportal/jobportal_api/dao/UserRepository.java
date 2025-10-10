@@ -43,4 +43,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                         @Param("status") UserStatus status,
                         Pageable pageable);
 
+        List<User> findByStatus(UserStatus status);
+
 }
