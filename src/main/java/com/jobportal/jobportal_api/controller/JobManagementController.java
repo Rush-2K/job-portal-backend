@@ -3,6 +3,9 @@ package com.jobportal.jobportal_api.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,14 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jobportal.jobportal_api.dto.request.CreateJobRequestDTO;
 import com.jobportal.jobportal_api.dto.request.UpdateJobDetailsRequestDTO;
 import com.jobportal.jobportal_api.dto.request.UpdateJobStatusRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
+import com.jobportal.jobportal_api.dto.response.ViewAllActiveJobsResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
+import com.jobportal.jobportal_api.dtos.PagedResponseDTO;
 import com.jobportal.jobportal_api.enums.ApiStatus;
 import com.jobportal.jobportal_api.service.JobManagementService;
 
@@ -37,12 +43,25 @@ public class JobManagementController {
     }
 
     // view all jobs posted by employer, can see theirs only
-    @GetMapping("/viewjobs/{userId}")
-    public ResponseEntity<?> getAllJobs(@PathVariable Long userId) {
-        List<ViewAllJobsResponseDTO> viewAllJobsResponses = jobManagementService.getAllJobs(userId);
+    @GetMapping("/viewjobs")
+    public ResponseEntity<?> getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ViewAllJobsResponseDTO> data = jobManagementService.getAllJobs(pageable);
+
+        PagedResponseDTO<ViewAllJobsResponseDTO> response = new PagedResponseDTO<>(
+                data.getContent(),
+                data.getNumber(),
+                data.getSize(),
+                data.getTotalElements(),
+                data.getTotalPages(),
+                data.isLast());
 
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
-                ApiStatus.SUCCESS.name(), LocalDateTime.now(), viewAllJobsResponses));
+                ApiStatus.SUCCESS.name(), LocalDateTime.now(), response));
     }
 
     @PostMapping("/createmultipost")

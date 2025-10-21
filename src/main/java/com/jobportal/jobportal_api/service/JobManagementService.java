@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -111,8 +113,10 @@ public class JobManagementService {
                 .collect(Collectors.toList());
     }
 
-    public List<ViewAllJobsResponseDTO> getAllJobs(Long userId) {
-        List<ViewAllJobsResponseDTO> allJobs = jobRepository.findJobsWithApplicationCount(userId);
+    public Page<ViewAllJobsResponseDTO> getAllJobs(Pageable pageable) {
+        UserProfileResponseDTO userProfileResponseDTO = userService.getUserDetails();
+        Page<ViewAllJobsResponseDTO> allJobs = jobRepository
+                .findJobsWithApplicationCount(userProfileResponseDTO.getUserId(), pageable);
 
         return allJobs;
     }

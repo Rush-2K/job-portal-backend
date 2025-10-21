@@ -29,7 +29,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
                         "WHERE j.user.id = :employerId " +
                         "GROUP BY j.id, j.title, j.description, j.location, " +
                         "j.companyName, j.jobStatus, j.salary, j.jobType, j.createdTime")
-        List<ViewAllJobsResponseDTO> findJobsWithApplicationCount(@Param("employerId") Long employerId);
+        Page<ViewAllJobsResponseDTO> findJobsWithApplicationCount(Long employerId,
+                        Pageable pageable);
 
         @Query("SELECT DISTINCT j FROM Job j LEFT JOIN FETCH j.application a LEFT JOIN FETCH a.user WHERE j.user.id = :userId")
         List<Job> findJobsWithApplicationsAndApplicantsByUserId(Long userId);

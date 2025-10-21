@@ -24,14 +24,16 @@ public class InactiveUserScheduler {
     private EmailService emailService;
 
     // run once every one minute
-    @Scheduled(cron = "0 */1 * * * *")
-    public void notifyInactiveUsers() {
-        List<User> inactiveUsers = userRepository.findByStatus(UserStatus.INACTIVE);
+    // @Scheduled(cron = "0 */1 * * * *")
+    // public void notifyInactiveUsers() {
+    // List<User> inactiveUsers = userRepository.findByStatus(UserStatus.INACTIVE);
 
-        for (User user : inactiveUsers) {
-            emailService.sendInactiveUserReminder(user.getEmail(), user.getName());
-        }
+    // for (User user : inactiveUsers) {
+    // log.info("Sending email to " + user.getName() + " ..");
+    // // emailService.sendInactiveUserReminder(user.getEmail(), user.getName());
+    // }
 
-        log.info("Sent inactivity reminder to " + inactiveUsers.size() + " users at " + LocalDateTime.now());
-    }
+    // log.info("Sent inactivity reminder to " + inactiveUsers.size() + " users at "
+    // + LocalDateTime.now());
+    // }
 }
