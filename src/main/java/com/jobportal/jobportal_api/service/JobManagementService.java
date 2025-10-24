@@ -186,6 +186,9 @@ public class JobManagementService {
         if (updateJobDetailsRequestDTO.getJobType() != null) {
             job.setJobType(updateJobDetailsRequestDTO.getJobType());
         }
+        if (updateJobDetailsRequestDTO.getJobStatus() != null) {
+            job.setJobStatus(updateJobDetailsRequestDTO.getJobStatus());
+        }
 
         // set the updated time
         job.setUpdatedTime(LocalDateTime.now());

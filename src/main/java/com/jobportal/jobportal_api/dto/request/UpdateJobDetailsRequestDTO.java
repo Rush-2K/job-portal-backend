@@ -11,6 +11,7 @@ public class UpdateJobDetailsRequestDTO {
     private String description;
     private String location;
     private String companyName;
+    private Boolean jobStatus;
     private Long salary;
     private String jobType;
 }

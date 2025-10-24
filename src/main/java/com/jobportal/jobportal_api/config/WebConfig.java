@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
         // set up cors mapping
         cors.addMapping(basePath + "/**")
                 .allowedOrigins(theAllowedOrigins)
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                 .allowedHeaders("*");
     }
 }
