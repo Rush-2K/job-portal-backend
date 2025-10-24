@@ -17,6 +17,7 @@ import com.jobportal.jobportal_api.dto.request.UpdateJobDetailsRequestDTO;
 import com.jobportal.jobportal_api.dto.request.UpdateJobStatusRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
 import com.jobportal.jobportal_api.dto.response.UserProfileResponseDTO;
+import com.jobportal.jobportal_api.dto.response.ViewActiveJobDetailsResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.entity.Job;
 import com.jobportal.jobportal_api.entity.User;
@@ -213,6 +214,16 @@ public class JobManagementService {
 
         // save
         jobRepository.save(job);
+    }
+
+    public ViewAllJobsResponseDTO getJobPostedDetails(Long jobId) {
+        // get userid
+        Long tokenUserId = userService.getUserIdInsideToken();
+        // cross check the table with the userid and jobid
+        Job job = jobRepository.findByIdAndUser_Id(jobId, tokenUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Error occur.."));
+        // return back
+        return viewAllJobsMapper.toViewAllJobsResponseDTO(job);
     }
 
 }

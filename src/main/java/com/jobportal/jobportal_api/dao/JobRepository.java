@@ -48,4 +48,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
                         @Param("minSalary") Double minSalary,
                         @Param("maxSalary") Double maxSalary);
 
+        Optional<Job> findByIdAndUser_Id(Long jobId, Long userId);
+
 }

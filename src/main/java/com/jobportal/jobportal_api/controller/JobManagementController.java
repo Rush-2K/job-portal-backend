@@ -22,6 +22,7 @@ import com.jobportal.jobportal_api.dto.request.CreateJobRequestDTO;
 import com.jobportal.jobportal_api.dto.request.UpdateJobDetailsRequestDTO;
 import com.jobportal.jobportal_api.dto.request.UpdateJobStatusRequestDTO;
 import com.jobportal.jobportal_api.dto.response.CreateJobResponseDTO;
+import com.jobportal.jobportal_api.dto.response.ViewActiveJobDetailsResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllActiveJobsResponseDTO;
 import com.jobportal.jobportal_api.dto.response.ViewAllJobsResponseDTO;
 import com.jobportal.jobportal_api.dtos.ApiResponseDto;
@@ -106,5 +107,14 @@ public class JobManagementController {
         jobManagementService.updateJobStatus(jobId, updateJobStatusRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
                 "Job Status updated successfully", LocalDateTime.now(), null));
+    }
+
+    @GetMapping("/view/{jobId}")
+    public ResponseEntity<?> viewJobPosted(@PathVariable Long jobId) {
+        log.info("getting job details posted...");
+        ViewAllJobsResponseDTO data = jobManagementService.getJobPostedDetails(jobId);
+        log.info("done getting it..");
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseDto<>(ApiStatus.SUCCESS, HttpStatus.OK.value(),
+                "Job retrieved successfully", LocalDateTime.now(), data));
     }
 }

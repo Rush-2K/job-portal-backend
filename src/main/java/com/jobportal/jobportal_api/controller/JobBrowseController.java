@@ -57,7 +57,7 @@ public class JobBrowseController {
                 ApiStatus.SUCCESS.name(), LocalDateTime.now(), response));
     }
 
-    // view all active jobs only
+    // view active jobs details
     @GetMapping("/view/{jobId}")
     public ResponseEntity<?> viewJobDetails(@PathVariable Long jobId) {
         ViewActiveJobDetailsResponseDTO data = jobBrowseService.getActiveJobDetails(jobId);
